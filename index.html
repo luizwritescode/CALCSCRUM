@@ -1,0 +1,184 @@
+<html>
+
+<head>
+
+
+<title> Calculadora </title>
+
+<style>
+
+body {
+	justify-content:center;
+	display:flex;
+	flex-direction: column;
+	text-align:center;
+}
+.container {
+display:flex;
+flex-direction:column;
+justify-content: center;
+
+}
+
+#buttons {
+justify-content:center;
+align-self:center;
+max-width: 300px;
+margin-horizontal: 150px;
+}
+
+
+#buttons button {
+	width: 50px;
+	height: 50px;
+	margin: 1%;
+}
+
+input {
+	font-size: 25px;
+	margin: 2%;
+	padding: 0 2%;
+	width: 290px;
+	height: 75px;
+	text-align: right;
+	
+}
+</style>
+
+</head>
+
+
+<body>
+
+<h1> Calculadora </h1> 
+
+<div class="container">
+
+<div>
+<input id="display" value=""></input>
+</div>
+
+
+<div id="buttons">
+<button>1</button>
+<button >2</button>
+
+<button>3</button>
+<button>CE</button>
+<button>C</button>
+
+<button>4</button>
+<button>5</button>
+<button>6</button>
+<button>+</button>
+<button>*</button>
+<button>7</button>
+<button>8</button>
+<button>9</button>
+<button>-</button>
+<button>/</button>
+<button>.</button>
+<button>0</button>
+<button>sqrt</button>
+<button>pow</button>
+
+<button>=</button>
+
+</div>
+ 
+</div>
+
+
+
+<script>
+
+
+let buttons = document.querySelector('#buttons')
+let display = document.querySelector('#display')
+
+
+/* ESTADOS
+0 -> esperando primeiro numero
+1 -> esperando segundo numero
+2 -> acabei de calcular
+
+*/
+let state = 0, LNUMBER = null; RNUMBER = null, op = null;
+
+//ADICIONAR CALLBACK PARA CADA APERTO DE BOTÃO
+for(let i = 0; i < buttons.children.length; i++) {
+	
+	let btn = buttons.children[i]
+	
+	btn.addEventListener("click", function() {
+
+		switch(btn.textContent) {
+			//SE O BOTAO APERTADO FOR UM NUMERO
+			case "0":
+			case "1":
+			case "2":
+			case "3":
+			case "4":
+			case "5":
+			case "6":
+			case "7":
+			case "8":
+			case "9":
+			
+				display.value += btn.textContent
+				if(state === 0) {
+					LNUMBER = LNUMBER === 0 ? parseInt(btn.textContent) : parseInt(LNUMBER + btn.textContent)
+				} else if ( state === 1 ) {
+					RNUMBER = RNUMBER === 0 ? parseInt(btn.textContent) : parseInt(RNUMBER + btn.textContent)
+				} else if (state === 2 ){
+					LNUMBER = LNUMBER === 0 ? parseInt(btn.textContent) : parseInt(LNUMBER + btn.textContent)
+					display.value = LNUMBER
+					RNUMBER = null
+					state = 0
+				}
+				break;
+			//SE O BOTAO FOR UMA OPERAÇÃO
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+				
+				display.value += " " +btn.textContent+ " "
+				state = 1;
+				op = btn.textContent
+				break;
+			case "=":
+				debugger;
+				let RESULT;
+				if(op === "+")	RESULT = LNUMBER + RNUMBER
+				else if(op === "-") RESULT = LNUMBER - RNUMBER
+				else if(op === "*") RESULT = LNUMBER * RNUMBER
+				else if(op === "/") RESULT = LNUMBER / RNUMBER
+				
+				display.value = RESULT
+				state = 2;
+				break;
+				
+			case "C":
+				display.value = ""
+				LNUMBER = 0
+				RNUMBER = 0
+				op = null;
+				break;
+			case "CE":
+				display.value = ""
+				break;
+			default:
+				break;
+		}
+		
+	})
+	
+}
+
+
+</script>
+
+</body>
+
+</head>
